@@ -1,6 +1,6 @@
 /**
  * Lumina户外景观灯 - 交互脚本
- * 功能：移动端菜单切换
+ * 功能：移动端菜单切换、Excel下载
  */
 
 (function() {
@@ -105,11 +105,10 @@
 })();
 
 /**
- * 下载技术参数表为Excel文件
+ * 获取技术参数数据
  */
-function downloadExcel() {
-  // 表格数据
-  const data = [
+function getSpecsData() {
+  return [
     ['参数项', '路径灯', '壁灯', '地埋灯', '柱灯', '庭院灯', '草坪灯', '投光灯', '氛围灯'],
     ['额定电压', 'AC 220-240V', 'AC 220-240V', 'AC/DC 12V', 'AC 220-240V', 'AC 220-240V', 'DC 12V/24V', 'AC 220-240V', 'DC 12V'],
     ['功率', '15W', '20W', '5W', '25W', '30W', '8W', '50W', '6W'],
@@ -121,27 +120,92 @@ function downloadExcel() {
     ['寿命', '50000h', '60000h', '50000h', '50000h', '50000h', '40000h', '50000h', '30000h'],
     ['保修期', '5年', '5年', '5年', '5年', '5年', '3年', '5年', '2年']
   ];
-
-  // 创建工作簿和工作表
-  const wb = XLSX.utils.book_new();
-  const ws = XLSX.utils.aoa_to_sheet(data);
-
-  // 设置列宽
-  ws['!cols'] = [
-    { wch: 12 },  // 参数项
-    { wch: 18 },  // 路径灯
-    { wch: 18 },  // 壁灯
-    { wch: 15 },  // 地埋灯
-    { wch: 18 },  // 柱灯
-    { wch: 18 },  // 庭院灯
-    { wch: 15 },  // 草坪灯
-    { wch: 15 },  // 投光灯
-    { wch: 15 }   // 氛围灯
-  ];
-
-  // 将工作表添加到工作簿
-  XLSX.utils.book_append_sheet(wb, ws, '技术参数');
-
-  // 下载文件
-  XLSX.writeFile(wb, 'Lumina户外景观灯_技术参数表.xlsx');
 }
+
+/**
+ * 将数据转换为CSV格式
+ */
+function dataToCSV(data) {
+  return data.map(row => 
+    row.map(cell => {
+      // 处理包含逗号或引号的单元格
+      if (cell.includes(',') || cell.includes('"') || cell.includes('\n')) {
+        return '"' + cell.replace(/"/g, '""') + '"';
+      }
+      return cell;
+    }).join(',')
+  ).join('\n');
+}
+
+/**
+ * 下载文件（通用方法）
+ */
+function downloadFile(content, filename, mimeType) {
+  const blob = new Blob([content], { type: mimeType + ';charset=utf-8;' });
+  const link = document.createElement('a');
+  
+  if (navigator.msSaveBlob) {
+    // IE 10+
+    navigator.msSaveBlob(blob, filename);
+  } else {
+    const url = URL.createObjectURL(blob);
+    link.href = url;
+    link.download = filename;
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+}
+
+/**
+ * 下载技术参数表为Excel文件
+ * 挂载到window对象确保全局可访问
+ */
+window.downloadExcel = function() {
+  const data = getSpecsData();
+  
+  // 检查SheetJS是否加载
+  if (typeof XLSX !== 'undefined') {
+    try {
+      // 创建工作簿和工作表
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.aoa_to_sheet(data);
+
+      // 设置列宽
+      ws['!cols'] = [
+        { wch: 12 },  // 参数项
+        { wch: 18 },  // 路径灯
+        { wch: 18 },  // 壁灯
+        { wch: 15 },  // 地埋灯
+        { wch: 18 },  // 柱灯
+        { wch: 18 },  // 庭院灯
+        { wch: 15 },  // 草坪灯
+        { wch: 15 },  // 投光灯
+        { wch: 15 }   // 氛围灯
+      ];
+
+      // 将工作表添加到工作簿
+      XLSX.utils.book_append_sheet(wb, ws, '技术参数');
+
+      // 下载Excel文件
+      XLSX.writeFile(wb, 'Lumina户外景观灯_技术参数表.xlsx');
+      
+      console.log('✅ Excel文件下载成功');
+      return;
+    } catch (error) {
+      console.error('Excel导出失败，尝试CSV格式:', error);
+    }
+  }
+  
+  // 备用方案：下载CSV格式
+  try {
+    const csvContent = '\uFEFF' + dataToCSV(data); // 添加BOM以支持中文
+    downloadFile(csvContent, 'Lumina户外景观灯_技术参数表.csv', 'text/csv');
+    console.log('✅ CSV文件下载成功');
+  } catch (error) {
+    alert('下载失败：' + error.message);
+    console.error('下载错误:', error);
+  }
+};
