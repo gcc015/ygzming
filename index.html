@@ -9,8 +9,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- SheetJS for Excel export -->
-    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+    <!-- xlsx-js-style for Excel export with styling support -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
   </head>
   <body>
     <!-- Header -->
@@ -404,14 +404,95 @@
         tbody.innerHTML = bodyHtml;
       }
 
-      // Excel下载功能
+      // Excel下载功能（带样式）
       function downloadExcel() {
         var data = getSpecsArray();
         
         if (typeof XLSX !== 'undefined') {
           var wb = XLSX.utils.book_new();
           var ws = XLSX.utils.aoa_to_sheet(data);
-          ws['!cols'] = [{wch:12},{wch:18},{wch:18},{wch:15},{wch:18},{wch:18},{wch:15},{wch:15},{wch:15}];
+          
+          // 设置列宽
+          ws['!cols'] = [{wch:14},{wch:20},{wch:20},{wch:16},{wch:20},{wch:20},{wch:16},{wch:16},{wch:16}];
+          
+          // 定义样式
+          var headerStyle = {
+            font: { bold: true, color: { rgb: 'FFFFFF' }, sz: 12, name: '微软雅黑' },
+            fill: { fgColor: { rgb: '1E5F8C' } },
+            alignment: { horizontal: 'center', vertical: 'center', wrapText: true },
+            border: {
+              top: { style: 'thin', color: { rgb: 'CCCCCC' } },
+              bottom: { style: 'thin', color: { rgb: 'CCCCCC' } },
+              left: { style: 'thin', color: { rgb: 'CCCCCC' } },
+              right: { style: 'thin', color: { rgb: 'CCCCCC' } }
+            }
+          };
+          
+          var paramColStyle = {
+            font: { bold: true, color: { rgb: '1E5F8C' }, sz: 11, name: '微软雅黑' },
+            fill: { fgColor: { rgb: 'E8F4FC' } },
+            alignment: { horizontal: 'left', vertical: 'center' },
+            border: {
+              top: { style: 'thin', color: { rgb: 'DDDDDD' } },
+              bottom: { style: 'thin', color: { rgb: 'DDDDDD' } },
+              left: { style: 'thin', color: { rgb: 'DDDDDD' } },
+              right: { style: 'thin', color: { rgb: 'DDDDDD' } }
+            }
+          };
+          
+          var dataStyle = {
+            font: { color: { rgb: '333333' }, sz: 11, name: '微软雅黑' },
+            fill: { fgColor: { rgb: 'FFFFFF' } },
+            alignment: { horizontal: 'center', vertical: 'center' },
+            border: {
+              top: { style: 'thin', color: { rgb: 'DDDDDD' } },
+              bottom: { style: 'thin', color: { rgb: 'DDDDDD' } },
+              left: { style: 'thin', color: { rgb: 'DDDDDD' } },
+              right: { style: 'thin', color: { rgb: 'DDDDDD' } }
+            }
+          };
+          
+          var altRowStyle = {
+            font: { color: { rgb: '333333' }, sz: 11, name: '微软雅黑' },
+            fill: { fgColor: { rgb: 'F8FBFE' } },
+            alignment: { horizontal: 'center', vertical: 'center' },
+            border: {
+              top: { style: 'thin', color: { rgb: 'DDDDDD' } },
+              bottom: { style: 'thin', color: { rgb: 'DDDDDD' } },
+              left: { style: 'thin', color: { rgb: 'DDDDDD' } },
+              right: { style: 'thin', color: { rgb: 'DDDDDD' } }
+            }
+          };
+          
+          // 获取工作表范围
+          var range = XLSX.utils.decode_range(ws['!ref']);
+          
+          // 为每个单元格应用样式
+          for (var R = range.s.r; R <= range.e.r; ++R) {
+            for (var C = range.s.c; C <= range.e.c; ++C) {
+              var cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
+              
+              if (!ws[cellAddress]) continue;
+              
+              if (R === 0) {
+                // 表头行：深色背景 + 白色粗体
+                ws[cellAddress].s = headerStyle;
+              } else if (C === 0) {
+                // 第一列（参数项）：浅色背景 + 蓝色粗体
+                ws[cellAddress].s = paramColStyle;
+              } else {
+                // 数据单元格：交替行背景色
+                ws[cellAddress].s = (R % 2 === 0) ? altRowStyle : dataStyle;
+              }
+            }
+          }
+          
+          // 设置行高
+          ws['!rows'] = [];
+          for (var i = 0; i <= range.e.r; i++) {
+            ws['!rows'].push({ hpt: i === 0 ? 30 : 25 });
+          }
+          
           XLSX.utils.book_append_sheet(wb, ws, '技术参数');
           XLSX.writeFile(wb, '阳光照明_技术参数表.xlsx');
         } else {
