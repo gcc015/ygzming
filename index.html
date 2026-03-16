@@ -458,5 +458,42 @@
     </footer>
 
     <script src="/scripts/main.js"></script>
+    <script>
+      // Excel下载功能（确保全局可用）
+      function downloadExcel() {
+        var data = [
+          ['参数项', '路径灯', '壁灯', '地埋灯', '柱灯', '庭院灯', '草坪灯', '投光灯', '氛围灯'],
+          ['额定电压', 'AC 220-240V', 'AC 220-240V', 'AC/DC 12V', 'AC 220-240V', 'AC 220-240V', 'DC 12V/24V', 'AC 220-240V', 'DC 12V'],
+          ['功率', '15W', '20W', '5W', '25W', '30W', '8W', '50W', '6W'],
+          ['色温', '3000K 暖白', '2700K-6500K 可调', '3000K 暖白', '3000K 暖白', '3000K 暖白', '3000K 暖白', '4000K 正白', 'RGB+3000K'],
+          ['光通量', '1500lm', '2000lm', '500lm', '2500lm', '3000lm', '800lm', '5000lm', '600lm'],
+          ['材质', '铝合金+钢化玻璃', '铝合金', '不锈钢304', '铝合金+玻璃', '铸铝+玻璃', '铝合金', '压铸铝', 'PC+铝合金'],
+          ['防护等级', 'IP65', 'IP66', 'IP67', 'IP65', 'IP65', 'IP66', 'IP67', 'IP65'],
+          ['工作温度', '-20°C ~ +50°C', '-20°C ~ +50°C', '-30°C ~ +60°C', '-20°C ~ +50°C', '-20°C ~ +50°C', '-30°C ~ +50°C', '-30°C ~ +60°C', '-20°C ~ +45°C'],
+          ['寿命', '50000h', '60000h', '50000h', '50000h', '50000h', '40000h', '50000h', '30000h'],
+          ['保修期', '5年', '5年', '5年', '5年', '5年', '3年', '5年', '2年']
+        ];
+        
+        if (typeof XLSX !== 'undefined') {
+          var wb = XLSX.utils.book_new();
+          var ws = XLSX.utils.aoa_to_sheet(data);
+          ws['!cols'] = [{wch:12},{wch:18},{wch:18},{wch:15},{wch:18},{wch:18},{wch:15},{wch:15},{wch:15}];
+          XLSX.utils.book_append_sheet(wb, ws, '技术参数');
+          XLSX.writeFile(wb, 'Lumina户外景观灯_技术参数表.xlsx');
+        } else {
+          // CSV备用方案
+          var csv = data.map(function(row) {
+            return row.map(function(cell) {
+              return cell.includes(',') ? '"' + cell + '"' : cell;
+            }).join(',');
+          }).join('\n');
+          var blob = new Blob(['\uFEFF' + csv], {type: 'text/csv;charset=utf-8;'});
+          var link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = 'Lumina户外景观灯_技术参数表.csv';
+          link.click();
+        }
+      }
+    </script>
   </body>
 </html>
