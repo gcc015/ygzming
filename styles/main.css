@@ -50,7 +50,7 @@
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
   
   /* 容器宽度 */
-  --max-width: 1200px;
+  --max-width: 1400px;
   
   /* 过渡 */
   --transition: all 0.3s ease;
@@ -453,42 +453,110 @@ a {
   background: var(--color-bg);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
+  position: relative;
+  /* 滚动提示渐变 */
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary) var(--color-bg-alt);
+}
+
+/* 自定义滚动条样式 */
+.table-wrapper::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+  background: var(--color-bg-alt);
+  border-radius: 4px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 4px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #0056b3;
 }
 
 .specs-table {
   width: 100%;
+  min-width: 900px;
   border-collapse: collapse;
   font-size: var(--text-sm);
+  table-layout: auto;
 }
 
 .specs-table thead {
   background: var(--color-primary);
   color: white;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .specs-table th {
-  padding: var(--spacing-md);
-  text-align: left;
+  padding: 14px 16px;
+  text-align: center;
   font-weight: 600;
-  font-size: var(--text-base);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.specs-table th:last-child {
+  border-right: none;
+}
+
+/* 第一列参数名称 - 左对齐 */
+.specs-table th:first-child {
+  text-align: left;
+  min-width: 100px;
+}
+
+/* 产品列 - 居中对齐 */
+.specs-table th:not(:first-child) {
+  min-width: 90px;
 }
 
 .specs-table td {
-  padding: var(--spacing-md);
+  padding: 12px 16px;
   border-bottom: 1px solid var(--color-border);
+  text-align: center;
+  white-space: nowrap;
+  font-size: var(--text-sm);
+  border-right: 1px solid var(--color-border);
+}
+
+.specs-table td:last-child {
+  border-right: none;
+}
+
+/* 第一列参数名称样式 */
+.specs-table td:first-child {
+  font-weight: 600;
+  color: var(--color-text);
+  text-align: left;
+  background: var(--color-bg-alt);
+  position: sticky;
+  left: 0;
+  z-index: 5;
+  border-right: 2px solid var(--color-border);
 }
 
 .specs-table tbody tr:nth-child(even) {
-  background: var(--color-bg-alt);
+  background: var(--color-bg);
+}
+
+.specs-table tbody tr:nth-child(even) td:first-child {
+  background: #E8ECF0;
 }
 
 .specs-table tbody tr:hover {
   background: #E8F4FF;
 }
 
-.specs-table td:first-child {
-  font-weight: 500;
-  color: var(--color-text);
+.specs-table tbody tr:hover td:first-child {
+  background: #D0E8FF;
 }
 
 /* ========================================
@@ -709,12 +777,18 @@ a {
   }
   
   .specs-table {
-    font-size: var(--text-xs);
+    font-size: 12px;
+    min-width: 700px;
   }
   
   .specs-table th,
   .specs-table td {
-    padding: var(--spacing-sm);
+    padding: 10px 12px;
+  }
+  
+  .specs-table th:first-child,
+  .specs-table td:first-child {
+    min-width: 80px;
   }
   
   .footer-content {
