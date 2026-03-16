@@ -6,7 +6,7 @@
 /* CSS变量定义 */
 :root {
   /* 品牌色 */
-  --color-primary: #007BFF;      /* 科技蓝 */
+  --color-primary: #18acbd;      /* 科技蓝 */
   --color-accent: #FFD700;       /* 日光黄 */
   --color-accent-alt: #FF6B35;   /* 活力橙 */
   
@@ -448,8 +448,53 @@ a {
   background: var(--color-bg-alt);
 }
 
+.specs .section-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+.specs .section-title,
+.specs .section-subtitle {
+  margin-bottom: 0;
+}
+
+/* 下载按钮样式 */
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: #217346;
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font-family);
+}
+
+.download-btn:hover {
+  background: #1a5c38;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(33, 115, 70, 0.3);
+}
+
+.download-btn:active {
+  transform: translateY(0);
+}
+
+.download-btn svg {
+  flex-shrink: 0;
+}
+
 .table-wrapper {
-  max-height: 500px;
+  max-height: 600px;
   overflow-x: auto;
   overflow-y: auto;
   background: var(--color-bg);
@@ -551,7 +596,7 @@ a {
   z-index: 10;
   min-width: 100px;
   white-space: nowrap;
-  border-right: 2px solid var(--color-primary);
+  /* border-right: 2px solid var(--color-primary); */
 }
 
 .specs-table tbody tr:nth-child(even) {
@@ -785,6 +830,16 @@ a {
   
   .scenarios-grid {
     grid-template-columns: 1fr;
+  }
+  
+  .specs .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .download-btn {
+    width: 100%;
+    justify-content: center;
   }
   
   .table-wrapper {
