@@ -252,121 +252,9 @@
         </div>
         
         <div class="table-wrapper">
-          <table class="specs-table">
-            <thead>
-              <tr>
-                <th>参数项</th>
-                <th>路径灯</th>
-                <th>壁灯</th>
-                <th>地埋灯</th>
-                <th>柱灯</th>
-                <th>庭院灯</th>
-                <th>草坪灯</th>
-                <th>投光灯</th>
-                <th>氛围灯</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>额定电压</strong></td>
-                <td>AC 220-240V</td>
-                <td>AC 220-240V</td>
-                <td>AC/DC 12V</td>
-                <td>AC 220-240V</td>
-                <td>AC 220-240V</td>
-                <td>DC 12V/24V</td>
-                <td>AC 220-240V</td>
-                <td>DC 12V</td>
-              </tr>
-              <tr>
-                <td><strong>功率</strong></td>
-                <td>15W</td>
-                <td>20W</td>
-                <td>5W</td>
-                <td>25W</td>
-                <td>30W</td>
-                <td>8W</td>
-                <td>50W</td>
-                <td>6W</td>
-              </tr>
-              <tr>
-                <td><strong>色温</strong></td>
-                <td>3000K 暖白</td>
-                <td>2700K-6500K 可调</td>
-                <td>3000K 暖白</td>
-                <td>3000K 暖白</td>
-                <td>3000K 暖白</td>
-                <td>3000K 暖白</td>
-                <td>4000K 正白</td>
-                <td>RGB+3000K</td>
-              </tr>
-              <tr>
-                <td><strong>光通量</strong></td>
-                <td>1500lm</td>
-                <td>2000lm</td>
-                <td>500lm</td>
-                <td>2500lm</td>
-                <td>3000lm</td>
-                <td>800lm</td>
-                <td>5000lm</td>
-                <td>600lm</td>
-              </tr>
-              <tr>
-                <td><strong>材质</strong></td>
-                <td>铝合金+钢化玻璃</td>
-                <td>铝合金</td>
-                <td>不锈钢304</td>
-                <td>铝合金+玻璃</td>
-                <td>铸铝+玻璃</td>
-                <td>铝合金</td>
-                <td>压铸铝</td>
-                <td>PC+铝合金</td>
-              </tr>
-              <tr>
-                <td><strong>防护等级</strong></td>
-                <td>IP65</td>
-                <td>IP66</td>
-                <td>IP67</td>
-                <td>IP65</td>
-                <td>IP65</td>
-                <td>IP66</td>
-                <td>IP67</td>
-                <td>IP65</td>
-              </tr>
-              <tr>
-                <td><strong>工作温度</strong></td>
-                <td>-20°C ~ +50°C</td>
-                <td>-20°C ~ +50°C</td>
-                <td>-30°C ~ +60°C</td>
-                <td>-20°C ~ +50°C</td>
-                <td>-20°C ~ +50°C</td>
-                <td>-30°C ~ +50°C</td>
-                <td>-30°C ~ +60°C</td>
-                <td>-20°C ~ +45°C</td>
-              </tr>
-              <tr>
-                <td><strong>寿命</strong></td>
-                <td>50000h</td>
-                <td>60000h</td>
-                <td>50000h</td>
-                <td>50000h</td>
-                <td>50000h</td>
-                <td>40000h</td>
-                <td>50000h</td>
-                <td>30000h</td>
-              </tr>
-              <tr>
-                <td><strong>保修期</strong></td>
-                <td>5年</td>
-                <td>5年</td>
-                <td>5年</td>
-                <td>5年</td>
-                <td>5年</td>
-                <td>3年</td>
-                <td>5年</td>
-                <td>2年</td>
-              </tr>
-            </tbody>
+          <table class="specs-table" id="specs-table">
+            <thead id="specs-thead"></thead>
+            <tbody id="specs-tbody"></tbody>
           </table>
         </div>
       </div>
@@ -459,20 +347,66 @@
 
     <script src="/scripts/main.js"></script>
     <script>
-      // Excel下载功能（确保全局可用）
+      // ========================================
+      // 技术参数数据（统一数据源）
+      // 修改这里即可同步更新表格显示和Excel下载
+      // ========================================
+      var SPECS_DATA = {
+        // 产品名称列表
+        products: ['路径灯', '壁灯', '地埋灯', '柱灯', '庭院灯', '草坪灯', '投光灯', '氛围灯'],
+        
+        // 参数数据（每行：参数名 + 各产品对应的值）
+        rows: [
+          { name: '额定电压', values: ['AC 220-240V', 'AC 220-240V', 'AC/DC 12V', 'AC 220-240V', 'AC 220-240V', 'DC 12V/24V', 'AC 220-240V', 'DC 12V'] },
+          { name: '功率', values: ['15W', '20W', '5W', '25W', '30W', '8W', '50W', '6W'] },
+          { name: '色温', values: ['3000K 暖白', '2700K-6500K 可调', '3000K 暖白', '3000K 暖白', '3000K 暖白', '3000K 暖白', '4000K 正白', 'RGB+3000K'] },
+          { name: '光通量', values: ['1500lm', '2000lm', '500lm', '2500lm', '3000lm', '800lm', '5000lm', '600lm'] },
+          { name: '材质', values: ['铝合金+钢化玻璃', '铝合金', '不锈钢304', '铝合金+玻璃', '铸铝+玻璃', '铝合金', '压铸铝', 'PC+铝合金'] },
+          { name: '防护等级', values: ['IP65', 'IP66', 'IP67', 'IP65', 'IP65', 'IP66', 'IP67', 'IP65'] },
+          { name: '工作温度', values: ['-20°C ~ +50°C', '-20°C ~ +50°C', '-30°C ~ +60°C', '-20°C ~ +50°C', '-20°C ~ +50°C', '-30°C ~ +50°C', '-30°C ~ +60°C', '-20°C ~ +45°C'] },
+          { name: '寿命', values: ['50000h', '60000h', '50000h', '50000h', '50000h', '40000h', '50000h', '30000h'] },
+          { name: '保修期', values: ['5年', '5年', '5年', '5年', '5年', '3年', '5年', '2年'] }
+        ]
+      };
+
+      // 将数据转换为二维数组（供Excel使用）
+      function getSpecsArray() {
+        var header = ['参数项'].concat(SPECS_DATA.products);
+        var rows = SPECS_DATA.rows.map(function(row) {
+          return [row.name].concat(row.values);
+        });
+        return [header].concat(rows);
+      }
+
+      // 动态渲染表格
+      function renderSpecsTable() {
+        var thead = document.getElementById('specs-thead');
+        var tbody = document.getElementById('specs-tbody');
+        
+        // 渲染表头
+        var headerRow = '<tr><th>参数项</th>';
+        SPECS_DATA.products.forEach(function(product) {
+          headerRow += '<th>' + product + '</th>';
+        });
+        headerRow += '</tr>';
+        thead.innerHTML = headerRow;
+        
+        // 渲染表体
+        var bodyHtml = '';
+        SPECS_DATA.rows.forEach(function(row) {
+          bodyHtml += '<tr>';
+          bodyHtml += '<td><strong>' + row.name + '</strong></td>';
+          row.values.forEach(function(value) {
+            bodyHtml += '<td>' + value + '</td>';
+          });
+          bodyHtml += '</tr>';
+        });
+        tbody.innerHTML = bodyHtml;
+      }
+
+      // Excel下载功能
       function downloadExcel() {
-        var data = [
-          ['参数项', '路径灯', '壁灯', '地埋灯', '柱灯', '庭院灯', '草坪灯', '投光灯', '氛围灯'],
-          ['额定电压', 'AC 220-240V', 'AC 220-240V', 'AC/DC 12V', 'AC 220-240V', 'AC 220-240V', 'DC 12V/24V', 'AC 220-240V', 'DC 12V'],
-          ['功率', '15W', '20W', '5W', '25W', '30W', '8W', '50W', '6W'],
-          ['色温', '3000K 暖白', '2700K-6500K 可调', '3000K 暖白', '3000K 暖白', '3000K 暖白', '3000K 暖白', '4000K 正白', 'RGB+3000K'],
-          ['光通量', '1500lm', '2000lm', '500lm', '2500lm', '3000lm', '800lm', '5000lm', '600lm'],
-          ['材质', '铝合金+钢化玻璃', '铝合金', '不锈钢304', '铝合金+玻璃', '铸铝+玻璃', '铝合金', '压铸铝', 'PC+铝合金'],
-          ['防护等级', 'IP65', 'IP66', 'IP67', 'IP65', 'IP65', 'IP66', 'IP67', 'IP65'],
-          ['工作温度', '-20°C ~ +50°C', '-20°C ~ +50°C', '-30°C ~ +60°C', '-20°C ~ +50°C', '-20°C ~ +50°C', '-30°C ~ +50°C', '-30°C ~ +60°C', '-20°C ~ +45°C'],
-          ['寿命', '50000h', '60000h', '50000h', '50000h', '50000h', '40000h', '50000h', '30000h'],
-          ['保修期', '5年', '5年', '5年', '5年', '5年', '3年', '5年', '2年']
-        ];
+        var data = getSpecsArray();
         
         if (typeof XLSX !== 'undefined') {
           var wb = XLSX.utils.book_new();
@@ -494,6 +428,9 @@
           link.click();
         }
       }
+
+      // 页面加载完成后渲染表格
+      document.addEventListener('DOMContentLoaded', renderSpecsTable);
     </script>
   </body>
 </html>
