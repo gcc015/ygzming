@@ -449,8 +449,9 @@ a {
 }
 
 .table-wrapper {
-  max-height: 480px;
-  overflow: auto;
+  max-height: 500px;
+  overflow-x: auto;
+  overflow-y: auto;
   background: var(--color-bg);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
@@ -461,7 +462,7 @@ a {
 /* 自定义滚动条样式 */
 .table-wrapper::-webkit-scrollbar {
   width: 8px;
-  height: 8px;
+  height: 10px;
 }
 
 .table-wrapper::-webkit-scrollbar-track {
@@ -483,10 +484,9 @@ a {
 }
 
 .specs-table {
-  width: max-content;
-  min-width: 100%;
   border-collapse: collapse;
   font-size: var(--text-sm);
+  width: 1500px;
 }
 
 .specs-table thead {
@@ -498,12 +498,13 @@ a {
 }
 
 .specs-table th {
-  padding: 14px 20px;
+  padding: 16px 24px;
   text-align: center;
   font-weight: 600;
   font-size: var(--text-sm);
   white-space: nowrap;
   border-right: 1px solid rgba(255, 255, 255, 0.15);
+  min-width: 120px;
 }
 
 .specs-table th:last-child {
@@ -513,22 +514,26 @@ a {
 /* 第一列参数名称 */
 .specs-table th:first-child {
   text-align: left;
-  min-width: 90px;
-  white-space: nowrap;
+  min-width: 100px;
+  position: sticky;
+  left: 0;
+  z-index: 25;
+  background: var(--color-primary);
 }
 
 /* 产品列 */
 .specs-table th:not(:first-child) {
-  min-width: 100px;
+  min-width: 120px;
 }
 
 .specs-table td {
-  padding: 12px 20px;
+  padding: 14px 24px;
   border-bottom: 1px solid var(--color-border);
   text-align: center;
   white-space: nowrap;
   font-size: var(--text-sm);
   border-right: 1px solid var(--color-border);
+  min-width: 120px;
 }
 
 .specs-table td:last-child {
@@ -544,7 +549,7 @@ a {
   position: sticky;
   left: 0;
   z-index: 10;
-  min-width: 90px;
+  min-width: 100px;
   white-space: nowrap;
   border-right: 2px solid var(--color-primary);
 }
