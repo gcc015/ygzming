@@ -513,7 +513,8 @@ a {
 /* 第一列参数名称 */
 .specs-table th:first-child {
   text-align: left;
-  min-width: 110px;
+  min-width: 90px;
+  white-space: nowrap;
 }
 
 /* 产品列 */
@@ -543,7 +544,8 @@ a {
   position: sticky;
   left: 0;
   z-index: 10;
-  min-width: 110px;
+  min-width: 90px;
+  white-space: nowrap;
   border-right: 2px solid var(--color-primary);
 }
 
@@ -795,7 +797,8 @@ a {
   
   .specs-table th:first-child,
   .specs-table td:first-child {
-    min-width: 90px;
+    min-width: 80px;
+    white-space: nowrap;
   }
   
   .footer-content {
