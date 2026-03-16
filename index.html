@@ -418,7 +418,7 @@
           // 定义样式
           var headerStyle = {
             font: { bold: true, color: { rgb: 'FFFFFF' }, sz: 12, name: '微软雅黑' },
-            fill: { fgColor: { rgb: '1E5F8C' } },
+            fill: { fgColor: { rgb: '18acbd' } },
             alignment: { horizontal: 'center', vertical: 'center', wrapText: true },
             border: {
               top: { style: 'thin', color: { rgb: 'CCCCCC' } },
@@ -429,8 +429,19 @@
           };
           
           var paramColStyle = {
-            font: { bold: true, color: { rgb: '1E5F8C' }, sz: 11, name: '微软雅黑' },
-            fill: { fgColor: { rgb: 'E8F4FC' } },
+            font: { bold: true, color: { rgb: '333333' }, sz: 11, name: '微软雅黑' },
+            fill: { fgColor: { rgb: 'FFFFFF' } },
+            alignment: { horizontal: 'left', vertical: 'center' },
+            border: {
+              top: { style: 'thin', color: { rgb: 'DDDDDD' } },
+              bottom: { style: 'thin', color: { rgb: 'DDDDDD' } },
+              left: { style: 'thin', color: { rgb: 'DDDDDD' } },
+              right: { style: 'thin', color: { rgb: 'DDDDDD' } }
+            }
+          };
+          var altParamColStyle = {
+            font: { bold: true, color: { rgb: '333333' }, sz: 11, name: '微软雅黑' },
+            fill: { fgColor: { rgb: 'F8FBFE' } },
             alignment: { horizontal: 'left', vertical: 'center' },
             border: {
               top: { style: 'thin', color: { rgb: 'DDDDDD' } },
@@ -479,7 +490,7 @@
                 ws[cellAddress].s = headerStyle;
               } else if (C === 0) {
                 // 第一列（参数项）：浅色背景 + 蓝色粗体
-                ws[cellAddress].s = paramColStyle;
+                ws[cellAddress].s = (R % 2 === 0) ? altParamColStyle : paramColStyle;
               } else {
                 // 数据单元格：交替行背景色
                 ws[cellAddress].s = (R % 2 === 0) ? altRowStyle : dataStyle;
