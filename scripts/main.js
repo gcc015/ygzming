@@ -1,5 +1,5 @@
 /**
- * Lumina户外景观灯 - 交互脚本
+ * 阳光照明户外景观灯 - 交互脚本
  * 功能：移动端菜单切换、Excel下载
  */
 
@@ -100,7 +100,7 @@
   }
   
   // 控制台欢迎信息
-  console.log('%c🌟 Lumina户外景观灯', 'font-size: 20px; font-weight: bold; color: #007BFF;');
+  console.log('%c🌟 阳光照明户外景观灯', 'font-size: 20px; font-weight: bold; color: #007BFF;');
   console.log('%c专业户外照明解决方案', 'font-size: 14px; color: #666;');
 })();
 
@@ -190,7 +190,7 @@ window.downloadExcel = function() {
       XLSX.utils.book_append_sheet(wb, ws, '技术参数');
 
       // 下载Excel文件
-      XLSX.writeFile(wb, 'Lumina户外景观灯_技术参数表.xlsx');
+      XLSX.writeFile(wb, '阳光照明户外景观灯_技术参数表.xlsx');
       
       console.log('✅ Excel文件下载成功');
       return;
@@ -202,7 +202,7 @@ window.downloadExcel = function() {
   // 备用方案：下载CSV格式
   try {
     const csvContent = '\uFEFF' + dataToCSV(data); // 添加BOM以支持中文
-    downloadFile(csvContent, 'Lumina户外景观灯_技术参数表.csv', 'text/csv');
+    downloadFile(csvContent, '阳光照明户外景观灯_技术参数表.csv', 'text/csv');
     console.log('✅ CSV文件下载成功');
   } catch (error) {
     alert('下载失败：' + error.message);
